@@ -11,7 +11,8 @@ import Admin from "./pages/Admin";
 import Products from "./pages/Products";
 import CookieDetail from "./pages/CookieDetail";
 import { CartProvider } from "./context/CartContext";
-import Checkout from "./pages/Checkout"; // Import the new Checkout page
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation"; // Import the new OrderConfirmation page
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,8 @@ const App = () => (
               <Route path="/products" element={<Products />} />
               <Route path="/cookie/:id" element={<CookieDetail />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} /> {/* New Checkout route */}
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} /> {/* New Order Confirmation route */}
               <Route path="/admin" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
