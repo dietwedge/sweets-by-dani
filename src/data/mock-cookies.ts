@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique IDs
+
 export interface Cookie {
   id: string;
   name: string;
@@ -10,7 +12,8 @@ export interface Cookie {
   allergens: string[];
 }
 
-export const mockCookies: Cookie[] = [
+// Use 'let' so we can modify this array
+export let mockCookies: Cookie[] = [
   {
     id: "1",
     name: "Classic Chocolate Chip",
@@ -67,3 +70,32 @@ export const mockCookies: Cookie[] = [
     allergens: ["Gluten", "Dairy", "Eggs"],
   },
 ];
+
+export const addCookie = (newCookie: Omit<Cookie, 'id'>): Cookie => {
+  const cookieWithId = { ...newCookie, id: uuidv4() };
+  mockCookies.push(cookieWithId);
+  return cookieWithId;
+};
+
+export const updateCookie = (updatedCookie: Cookie): Cookie | undefined => {
+  const index = mockCookies.findIndex(cookie => cookie.id === updatedCookie.id);
+  if (index !== -1) {
+    mockCookies[index] = updatedCookie;
+    return updatedCookie;
+  }
+  return undefined;
+};
+
+export const deleteCookie = (id: string): boolean => {
+  const initialLength = mockCookies.length;
+  mockCookies = mockCookies.filter(cookie => cookie.id !== id);
+  return mockCookies.length < initialLength;
+};
+
+export const getCookieById = (id: string): Cookie | undefined => {
+  return mockCookies.find(cookie => cookie.id === id);
+};
+
+export const getAllCookies = (): Cookie[] => {
+  return [...mockCookies]; // Return a copy to prevent direct modification
+};
