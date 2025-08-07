@@ -1,25 +1,22 @@
-import { MadeWithDyad } from "@/components/made-with-dyad";
+import React from "react";
 import { mockCookies } from "@/data/mock-cookies";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
-const Index = () => {
-  const featuredCookies = mockCookies.filter(cookie => cookie.isFeatured);
-
+const Products = () => {
   return (
-    <div className="min-h-[calc(100vh-150px)] flex flex-col items-center justify-center py-8">
+    <div className="py-8">
       <div className="text-center mb-8">
-        <h1 className="text-5xl font-extrabold text-primary mb-4">Welcome to Sweets by Dani!</h1>
-        <p className="text-xl text-muted-foreground">
-          Indulge in our freshly baked, delightful cookies.
+        <h1 className="text-4xl font-extrabold text-primary mb-4">Our Delicious Cookies</h1>
+        <p className="text-lg text-muted-foreground">
+          Explore our full range of freshly baked delights.
         </p>
       </div>
 
-      <section className="w-full max-w-6xl">
-        <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Our Featured Delights</h2>
+      <section className="w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredCookies.map(cookie => (
+          {mockCookies.map(cookie => (
             <Card key={cookie.id} className="flex flex-col justify-between">
               <Link to={`/cookie/${cookie.id}`}>
                 <CardHeader>
@@ -42,4 +39,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Products;

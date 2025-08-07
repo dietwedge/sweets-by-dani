@@ -5,9 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Layout from "./components/Layout"; // Import the new Layout component
-import Cart from "./pages/Cart"; // Import the new Cart page
-import Admin from "./pages/Admin"; // Import the new Admin page
+import Layout from "./components/Layout";
+import Cart from "./pages/Cart";
+import Admin from "./pages/Admin";
+import Products from "./pages/Products"; // Import the new Products page
+import CookieDetail from "./pages/CookieDetail"; // Import the new CookieDetail page
 
 const queryClient = new QueryClient();
 
@@ -17,11 +19,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout> {/* Wrap Routes with Layout */}
+        <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/cart" element={<Cart />} /> {/* New Cart route */}
-            <Route path="/admin" element={<Admin />} /> {/* New Admin route */}
+            <Route path="/products" element={<Products />} /> {/* New Products route */}
+            <Route path="/cookie/:id" element={<CookieDetail />} /> {/* New Cookie Detail route */}
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

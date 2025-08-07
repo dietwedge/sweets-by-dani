@@ -15,6 +15,9 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </Button>
           <Button variant="ghost" asChild>
+            <Link to="/products">Shop</Link>
+          </Button>
+          <Button variant="ghost" asChild>
             <Link to="/cart">
               <ShoppingCart className="mr-2 h-4 w-4" /> Cart
             </Link>
