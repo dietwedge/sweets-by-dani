@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { mockCookies } from "@/data/mock-cookies";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Minus, Plus } from "lucide-react";
+import { useCart } from "@/context/CartContext"; // Import useCart
 
 const CookieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const cookie = mockCookies.find(c => c.id === id);
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart(); // Use addToCart from context
 
   if (!cookie) {
     return (
@@ -22,6 +25,10 @@ const CookieDetail = () => {
       </div>
     );
   }
+
+  const handleAddToCart = () => {
+    addToCart(cookie, quantity);
+  };
 
   return (
     <div className="py-8 max-w-4xl mx-auto">
@@ -54,8 +61,26 @@ const CookieDetail = () => {
               )}
             </CardContent>
           </div>
-          <Button className="w-full mt-4" disabled={!cookie.isAvailable}>
-            Add to Cart
+          <div className="flex items-center space-x-2 mb-4">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              disabled={quantity <= 1}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+            <span className="text-xl font-semibold w-8 text-center">{quantity}</span>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setQuantity(quantity + 1)}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+          <Button className="w-full mt-4" onClick={handleAddToCart} disabled={!cookie.isAvailable}>
+            Add {quantity} to Cart
           </Button>
         </div>
       </Card>

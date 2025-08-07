@@ -8,8 +8,9 @@ import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import Cart from "./pages/Cart";
 import Admin from "./pages/Admin";
-import Products from "./pages/Products"; // Import the new Products page
-import CookieDetail from "./pages/CookieDetail"; // Import the new CookieDetail page
+import Products from "./pages/Products";
+import CookieDetail from "./pages/CookieDetail";
+import { CartProvider } from "./context/CartContext"; // Import CartProvider
 
 const queryClient = new QueryClient();
 
@@ -19,17 +20,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/products" element={<Products />} /> {/* New Products route */}
-            <Route path="/cookie/:id" element={<CookieDetail />} /> {/* New Cookie Detail route */}
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/admin" element={<Admin />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <CartProvider> {/* Wrap Layout with CartProvider */}
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/cookie/:id" element={<CookieDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/admin" element={<Admin />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </CartProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

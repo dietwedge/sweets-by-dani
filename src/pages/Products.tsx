@@ -3,8 +3,11 @@ import { mockCookies } from "@/data/mock-cookies";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useCart } from "@/context/CartContext"; // Import useCart
 
 const Products = () => {
+  const { addToCart } = useCart(); // Use addToCart from context
+
   return (
     <div className="py-8">
       <div className="text-center mb-8">
@@ -29,7 +32,9 @@ const Products = () => {
                 <p className="text-xl font-bold text-primary">${cookie.price.toFixed(2)}</p>
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Add to Cart</Button>
+                <Button className="w-full" onClick={() => addToCart(cookie, 1)} disabled={!cookie.isAvailable}>
+                  Add to Cart
+                </Button>
               </CardFooter>
             </Card>
           ))}
