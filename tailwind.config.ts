@@ -95,3 +95,37 @@ export default {
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
+module.exports = {
+  // 1️⃣  Keep the rest of your config intact
+  // 2️⃣  Add the new palette under `theme.extend.colors`
+  theme: {
+    extend: {
+      colors: {
+        // Primary shades
+        primary: {
+          100: '#EE1D52',
+          200: '#ff607e',
+          300: '#ffcddf',
+        },
+
+        // Accent shades
+        accent: {
+          100: '#FFC107',
+          200: '#916400',
+        },
+
+        // Text shades
+        text: {
+          100: '#333333',
+          200: '#5c5c5c',
+        },
+
+        // Background shades
+        bg: {
+          100: '#F7F7F7',
+          200: '#ededed',
+          300: '#c4c4c4',
+        },
+      },
+    },
+  },
