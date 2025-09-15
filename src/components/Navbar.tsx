@@ -6,6 +6,7 @@ import { useCart } from "@/context/CartContext";
 import { useSession } from "@/context/SessionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ThemeToggle } from "./ThemeToggle"; // Import ThemeToggle
 
 const Navbar = () => {
   const { cartItemCount } = useCart();
@@ -40,7 +41,7 @@ const Navbar = () => {
           </Button>
           {session && (
             <Button variant="ghost" asChild>
-              <Link to="/my-account"> {/* Changed to My Account */}
+              <Link to="/my-account">
                 <span className="flex items-center">
                   <User className="mr-2 h-4 w-4" /> My Account
                 </span>
@@ -69,6 +70,7 @@ const Navbar = () => {
               </Link>
             </Button>
           )}
+          <ThemeToggle /> {/* Add ThemeToggle here */}
         </div>
       </div>
     </nav>

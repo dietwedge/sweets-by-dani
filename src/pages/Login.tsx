@@ -25,7 +25,7 @@ const Login = () => {
         <h1 className="text-3xl font-bold text-center text-primary mb-6">Sign In / Sign Up</h1>
         <Auth
           supabaseClient={supabase}
-          providers={['google', 'facebook']} // Enabled Google and Facebook providers
+          providers={['google', 'facebook']}
           appearance={{
             theme: ThemeSupa,
             variables: {
@@ -33,11 +33,19 @@ const Login = () => {
                 colors: {
                   brand: 'hsl(var(--primary))',
                   brandAccent: 'hsl(var(--primary-foreground))',
+                  // Adjust other colors for dark theme if needed
+                  defaultButtonBackground: 'hsl(var(--secondary))',
+                  defaultButtonBackgroundHover: 'hsl(var(--secondary-foreground))',
+                  inputBackground: 'hsl(var(--input))',
+                  inputBorder: 'hsl(var(--border))',
+                  inputBorderHover: 'hsl(var(--ring))',
+                  inputBorderFocus: 'hsl(var(--ring))',
+                  inputText: 'hsl(var(--foreground))',
                 },
               },
             },
           }}
-          theme="light"
+          theme="dark" // Set the theme to dark
           redirectTo={window.location.origin}
         />
       </div>
