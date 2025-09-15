@@ -11,92 +11,77 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    eventDate: '',
     message: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Custom Order Request:", formData);
-    toast.success("Your custom order request has been sent! We'll be in touch soon.");
-
+  const handleSubmit = (e: React.FormEvent) => {
+    // FabForm handles the actual submission, this is just for client-side feedback
+    toast.success("Your message has been sent!");
     setFormData({
       name: '',
       email: '',
-      eventDate: '',
       message: '',
     });
-    setIsSubmitting(false);
   };
 
   return (
     <section className="w-full max-w-3xl mx-auto py-12 px-4">
-      <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Custom Orders & Events</h2>
+      <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Contact Us</h2>
       <p className="text-center text-muted-foreground mb-8">
-        Planning a party or special event? We'd love to create custom cookie orders just for you!
-        Fill out the form below and we'll get back to you to discuss your sweet needs.
+        Have a question or a custom order request? Send us a message!
       </p>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label htmlFor="name">Your Name</Label>
-          <Input
-            id="name"
-            type="text"
-            placeholder="John Doe"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Your Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="john.doe@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="eventDate">Event Date (Optional)</Label>
-          <Input
-            id="eventDate"
-            type="date"
-            value={formData.eventDate}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <Label htmlFor="message">Tell us about your order!</Label>
-          <Textarea
-            id="message"
-            placeholder="I'm looking for 5 dozen custom-decorated cookies for a birthday party on..."
-            rows={5}
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Sending Request..." : "Send Custom Order Request"}
-        </Button>
-      </form>
+      <div className="bg-card shadow-md rounded-lg p-6 w-full max-w-md mx-auto">
+        <form action="https://fabform.io/f/{your-fabform-id}" method="POST" className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="John Doe"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="john.doe@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+          <div>
+            <Label htmlFor="message">Message</Label>
+            <Textarea
+              id="message"
+              name="message"
+              rows={4}
+              placeholder="Your message here..."
+              value={formData.message}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+          <Button type="submit" className="w-full">Send</Button>
+        </form>
+      </div>
     </section>
   );
 };
