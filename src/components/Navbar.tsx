@@ -31,9 +31,7 @@ const Navbar = () => {
           <Button variant="ghost" asChild>
             <Link to="/">Home</Link>
           </Button>
-          <Button variant="ghost" asChild>
-            <Link to="/products">Shop</Link>
-          </Button>
+          {/* Removed "Shop" link */}
           <Button variant="ghost" asChild>
             <Link to="/cart">
               <span className="flex items-center">

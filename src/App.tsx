@@ -2,12 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
-import Products from "./pages/Products";
-import CookieDetail from "./pages/CookieDetail";
+// import Products from "./pages/Products"; // Removed
+// import CookieDetail from "./pages/CookieDetail"; // Removed
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
-import MyOrders from "./pages/MyOrders"; // Import MyOrders
+import MyOrders from "./pages/MyOrders";
 import Admin from "./pages/Admin";
 import AdminOrders from "./pages/AdminOrders";
 import Login from "./pages/Login";
@@ -25,8 +25,8 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/cookie/:id" element={<CookieDetail />} />
+              {/* Removed Products route */}
+              {/* Removed CookieDetail route */}
               <Route path="/cart" element={<Cart />} />
               <Route
                 path="/checkout"
@@ -45,7 +45,7 @@ function App() {
                 }
               />
               <Route
-                path="/my-orders" // New protected route for My Orders
+                path="/my-orders"
                 element={
                   <ProtectedRoute>
                     <MyOrders />

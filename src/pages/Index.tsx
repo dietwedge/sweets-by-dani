@@ -42,11 +42,8 @@ const Index = () => {
                   <p className="text-lg text-muted-foreground mb-6">{cookie.description}</p>
                   <p className="text-2xl font-extrabold text-foreground mb-6">${cookie.price.toFixed(2)}</p>
                   <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                    <Button asChild size="lg">
-                      <Link to={`/cookie/${cookie.id}`}>View Details</Link>
-                    </Button>
+                    {/* Removed "View Details" button */}
                     <Button
-                      variant="outline"
                       size="lg"
                       onClick={() => addToCart(cookie, 1)}
                       disabled={!cookie.isAvailable}
