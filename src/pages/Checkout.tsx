@@ -16,15 +16,22 @@ const Checkout = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('stripe'); // Default to Stripe
 
   const handleCompleteOrder = async () => {
+    console.log("handleCompleteOrder called.");
+    console.log("User:", user);
+    console.log("Cart length:", cart.length);
+    console.log("Cart total:", cartTotal);
+
     if (!user) {
       toast.error("You must be logged in to place an order.");
       navigate('/login');
+      console.log("Redirecting to login.");
       return;
     }
 
     if (cart.length === 0) {
       toast.error("Your cart is empty. Please add items before checking out.");
       navigate('/');
+      console.log("Redirecting to home due to empty cart.");
       return;
     }
 
@@ -47,6 +54,7 @@ const Checkout = () => {
       }
 
       const orderId = orderData.id;
+      console.log("Order created with ID:", orderId);
 
       // 2. Create order items in the 'order_items' table
       const orderItems = cart.map(item => ({
@@ -63,11 +71,13 @@ const Checkout = () => {
       if (orderItemsError) {
         throw new Error(orderItemsError?.message || "Failed to create order items.");
       }
+      console.log("Order items created.");
 
       // 3. Clear the cart and navigate to confirmation
       clearCart();
       toast.success("Order placed successfully!");
       navigate("/order-confirmation", { state: { orderId, paymentMethod: selectedPaymentMethod } });
+      console.log("Navigating to order confirmation.");
 
     } catch (error: any) {
       console.error("Error completing order:", error.message);
