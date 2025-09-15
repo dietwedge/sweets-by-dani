@@ -8,14 +8,14 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         navigate('/'); // Redirect to home after successful login
       }
     });
 
     return () => {
-      authListener.unsubscribe();
+      subscription.unsubscribe();
     };
   }, [navigate]);
 
