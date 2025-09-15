@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, LogOut } from "lucide-react";
+import { ShoppingCart, User, LogOut, Package } from "lucide-react"; // Added Package icon
 import { useCart } from "@/context/CartContext";
 import { useSession } from "@/context/SessionContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,12 +31,21 @@ const Navbar = () => {
           <Button variant="ghost" asChild>
             <Link to="/">Home</Link>
           </Button>
-          {/* Removed the "Shop" link as requested */}
+          <Button variant="ghost" asChild>
+            <Link to="/products">Shop</Link> {/* Re-added Shop link for easier navigation */}
+          </Button>
           <Button variant="ghost" asChild>
             <Link to="/cart">
               <ShoppingCart className="mr-2 h-4 w-4" /> Cart ({cartItemCount})
             </Link>
           </Button>
+          {session && ( // Show My Orders link only if logged in
+            <Button variant="ghost" asChild>
+              <Link to="/my-orders">
+                <Package className="mr-2 h-4 w-4" /> My Orders
+              </Link>
+            </Button>
+          )}
           {isAdmin && ( // Only show Admin link if user is an admin
             <Button variant="ghost" asChild>
               <Link to="/admin">

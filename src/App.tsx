@@ -7,6 +7,7 @@ import CookieDetail from "./pages/CookieDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import MyOrders from "./pages/MyOrders"; // Import MyOrders
 import Admin from "./pages/Admin";
 import AdminOrders from "./pages/AdminOrders";
 import Login from "./pages/Login";
@@ -40,6 +41,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <OrderConfirmation />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-orders" // New protected route for My Orders
+                element={
+                  <ProtectedRoute>
+                    <MyOrders />
                   </ProtectedRoute>
                 }
               />
