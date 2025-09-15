@@ -25,7 +25,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const fetchUserProfile = async (userId: string) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('*, user_id') // Select all profile fields, including new ones
+      .select('*') // Select all profile fields, 'user_id' is no longer needed
       .eq('id', userId)
       .single();
 
