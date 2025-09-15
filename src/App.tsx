@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
@@ -7,37 +8,19 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import Admin from "./pages/Admin";
-import NotFound from "./pages/NotFound";
+import AdminOrders from "./pages/AdminOrders"; // Import AdminOrders
 import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { CartProvider } from "./context/CartContext";
-import { SessionProvider, useSession } from "./context/SessionContext";
-import { Toaster } from "@/components/ui/sonner"; // Assuming sonner is installed for toasts
-
-// A simple wrapper to protect routes
-const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { session, loading, isAdmin } = useSession();
-
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading authentication...</div>;
-  }
-
-  if (!session) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/" replace />; // Redirect non-admins from admin routes
-  }
-
-  return children;
-};
+import { SessionProvider } from "./context/SessionContext";
 
 function App() {
   return (
     <Router>
-      <CartProvider>
-        <SessionProvider>
-          <Toaster /> {/* Toaster for displaying notifications */}
+      <SessionProvider>
+        <CartProvider>
+          <Toaster richColors />
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -50,16 +33,24 @@ function App() {
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute adminOnly={true}>
+                  <ProtectedRoute adminOnly>
                     <Admin />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/orders" // New route for Admin Orders
+                element={
+                  <ProtectedRoute adminOnly>
+                    <AdminOrders />
                   </ProtectedRoute>
                 }
               />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
-        </SessionProvider>
-      </CartProvider>
+        </CartProvider>
+      </SessionProvider>
     </Router>
   );
 }

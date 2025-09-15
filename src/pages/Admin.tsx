@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Package } from "lucide-react";
 import { getAllCookies, addCookie, updateCookie, deleteCookie, Cookie } from "@/data/mock-cookies";
 import AdminCookieTable from "@/components/admin/AdminCookieTable";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import CookieForm from "@/components/admin/CookieForm";
 import { toast } from "sonner";
+import { Link } from "react-router-dom"; // Import Link
 
 const Admin = () => {
   const [cookies, setCookies] = useState<Cookie[]>([]);
@@ -61,23 +62,30 @@ const Admin = () => {
     <div className="py-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-extrabold text-primary">Admin Dashboard</h1>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => { setEditingCookie(null); setIsFormOpen(true); }}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add New Cookie
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{editingCookie ? "Edit Cookie" : "Add New Cookie"}</DialogTitle>
-            </DialogHeader>
-            <CookieForm
-              initialData={editingCookie}
-              onSubmit={editingCookie ? handleUpdateCookie : handleAddCookie}
-              onCancel={handleFormClose}
-            />
-          </DialogContent>
-        </Dialog>
+        <div className="flex space-x-4">
+          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => { setEditingCookie(null); setIsFormOpen(true); }}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add New Cookie
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>{editingCookie ? "Edit Cookie" : "Add New Cookie"}</DialogTitle>
+              </DialogHeader>
+              <CookieForm
+                initialData={editingCookie}
+                onSubmit={editingCookie ? handleUpdateCookie : handleAddCookie}
+                onCancel={handleFormClose}
+              />
+            </DialogContent>
+          </Dialog>
+          <Button asChild>
+            <Link to="/admin/orders">
+              <Package className="mr-2 h-4 w-4" /> Manage Orders
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <AdminCookieTable
