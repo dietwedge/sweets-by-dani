@@ -42,8 +42,7 @@ const ContactForm = () => {
         <div className="md:w-1/2">
           <h2 className="text-4xl font-bold text-foreground mb-4">Contact us</h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Have questions or need assistance? We're here to help! Reach out to our team
-            for support, inquiries, or collaboration opportunities.
+            Contact us if you need large orders for a party or special event.
           </p>
           <form action="https://fabform.io/f/{your-fabform-id}" method="POST" className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,29 +99,29 @@ const ContactForm = () => {
             </div>
             <div>
               <Label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</Label>
-              <Textarea
-                id="message"
-                name="message"
-                rows={5}
-                placeholder="Enter Message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
-              />
-            </div>
-            <Button type="submit" className="w-full py-3 text-lg bg-primary text-primary-foreground hover:bg-primary/90">Send message</Button>
-          </form>
-        </div>
-        <div className="md:w-1/2 flex items-center justify-center">
-          <img
-            src="/images/contact-form-cookies.png"
-            alt="Assortment of delicious cookies"
-            className="rounded-lg object-cover w-full h-full max-h-[500px] md:max-h-none"
-          />
-        </div>
+            <Textarea
+              id="message"
+              name="message"
+              rows={5}
+              placeholder="Enter Message"
+              value={formData.message}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+            />
+          </div>
+          <Button type="submit" className="w-full py-3 text-lg bg-primary text-primary-foreground hover:bg-primary/90">Send message</Button>
+        </form>
       </div>
-    </section>
+      <div className="md:w-1/2 flex items-center justify-center">
+        <img
+          src="/images/contact-form-cookies.png"
+          alt="Assortment of delicious cookies"
+          className="rounded-lg object-cover w-full h-full max-h-[500px] md:max-h-none"
+        />
+      </div>
+    </div>
+  </section>
   );
 };
 
