@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 96%; /* #F5F5F5 */
+    --foreground: 0 0% 20%; /* #333333 */
+
+    --card: 0 0% 92%; /* #ebebeb */
+    --card-foreground: 0 0% 20%; /* #333333 */
+
+    --popover: 0 0% 92%; /* #ebebeb */
+    --popover-foreground: 0 0% 20%; /* #333333 */
+
+    --primary: 338 100% 62%; /* #FF4081 */
+    --primary-foreground: 338 100% 74%; /* #ff79b0 */
+
+    --secondary: 185 100% 50%; /* #00E5FF */
+    --secondary-foreground: 190 100% 30%; /* #00829b */
+
+    --muted: 300 100% 95%; /* #ffe4ff */
+    --muted-foreground: 0 0% 36%; /* #5c5c5c */
+
+    --accent: 185 100% 50%; /* #00E5FF */
+    --accent-foreground: 190 100% 30%; /* #00829b */
+
+    --destructive: 0 84.2% 60.2%; /* Default red for destructive actions */
+    --destructive-foreground: 0 0% 98%; /* Default white for text on destructive */
+
+    --border: 0 0% 76%; /* #c2c2c2 */
+    --input: 0 0% 76%; /* #c2c2c2 */
+    --ring: 338 100% 62%; /* #FF4081 */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark mode variables are not provided, so keeping defaults or removing if empty */
+    /* If you'd like to define a dark mode, please provide a separate color palette for it. */
+  }
+}
