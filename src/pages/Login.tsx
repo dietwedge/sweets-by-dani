@@ -25,7 +25,7 @@ const Login = () => {
         <h1 className="text-3xl font-bold text-center text-primary mb-6">Sign In / Sign Up</h1>
         <Auth
           supabaseClient={supabase}
-          providers={[]} // No third-party providers for now
+          providers={['google', 'facebook']} // Enabled Google and Facebook providers
           appearance={{
             theme: ThemeSupa,
             variables: {
@@ -37,8 +37,8 @@ const Login = () => {
               },
             },
           }}
-          theme="light" // You can change this to "dark" or dynamically based on theme
-          redirectTo={window.location.origin} // Redirects back to the app's origin
+          theme="light"
+          redirectTo={window.location.origin}
         />
       </div>
     </div>
