@@ -94,7 +94,7 @@ const MyAccount = () => {
           <Dialog open={isProfileFormOpen} onOpenChange={setIsProfileFormOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
-                <Edit className="mr-2 h-4 w-4" /> Edit Profile
+                <span><Edit className="mr-2 h-4 w-4" /> Edit Profile</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

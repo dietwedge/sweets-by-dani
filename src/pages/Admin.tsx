@@ -66,7 +66,7 @@ const Admin = () => {
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
               <Button onClick={() => { setEditingCookie(null); setIsFormOpen(true); }}>
-                <PlusCircle className="mr-2 h-4 w-4" /> Add New Cookie
+                <span><PlusCircle className="mr-2 h-4 w-4" /> Add New Cookie</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -82,7 +82,9 @@ const Admin = () => {
           </Dialog>
           <Button asChild>
             <Link to="/admin/orders">
-              <Package className="mr-2 h-4 w-4" /> Manage Orders
+              <span className="flex items-center">
+                <Package className="mr-2 h-4 w-4" /> Manage Orders
+              </span>
             </Link>
           </Button>
         </div>
