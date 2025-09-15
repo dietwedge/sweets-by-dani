@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Profile } from '@/types/db'; // Import Profile type
 
 interface SessionContextType {
   session: Session | null;
@@ -69,11 +70,22 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       .single();
 
     if (error) {
-      console.error('Error fetching user profile:', error);
-      setIsAdmin(false);
-      toast.error('Failed to load user profile.');
+      // Supabase's .single() method returns an error if no row is found.
+      // The error code for 'no rows found' is typically 'PGRST116'.
+      if (error.code === 'PGRST116') {
+        console.warn(`No profile found for user ${userId}. Assuming not admin.`);
+        setIsAdmin(false);
+      } else {
+        console.error('Error fetching user profile:', error);
+        setIsAdmin(false);
+        toast.error('Failed to load user profile.');
+      }
     } else if (data) {
       setIsAdmin(data.is_admin);
+    } else {
+      // This case should ideally not be reached if error.code === 'PGRST116' is handled above,
+      // but as a fallback, assume not admin if data is null.
+      setIsAdmin(false);
     }
   };
 

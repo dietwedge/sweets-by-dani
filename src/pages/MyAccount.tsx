@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from '@/context/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Order, Profile } from '@/types/db'; // Assuming Profile type exists or will be created
+import { Order, Profile } from '@/types/db';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -38,9 +38,15 @@ const MyAccount = () => {
       .single();
 
     if (profileError) {
-      console.error('Error fetching user profile:', profileError);
-      toast.error('Failed to load user profile.');
-      setProfile(null);
+      if (profileError.code === 'PGRST116') { // No rows found
+        console.warn(`No profile found for user ${userId} in MyAccount. Displaying default info.`);
+        // Provide a default profile object to prevent null issues in rendering
+        setProfile({ id: userId, full_name: 'Guest User', email: user?.email || 'N/A', is_admin: false, created_at: '', updated_at: '', user_id: userId });
+      } else {
+        console.error('Error fetching user profile:', profileError);
+        toast.error('Failed to load user profile.');
+        setProfile(null);
+      }
     } else {
       setProfile(profileData as Profile);
     }
