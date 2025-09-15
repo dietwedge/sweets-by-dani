@@ -6,52 +6,32 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Package, DollarSign, Calendar, UserCircle2, Mail } from 'lucide-react';
+import { Package, DollarSign, Calendar, UserCircle2, Mail, Home, Phone, Edit } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import UserProfileForm from '@/components/UserProfileForm';
 
 const MyAccount = () => {
-  const { user, loading: sessionLoading } = useSession();
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const { user, loading: sessionLoading, profile, refreshProfile } = useSession();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [ordersError, setOrdersError] = useState<string | null>(null);
+  const [isProfileFormOpen, setIsProfileFormOpen] = useState(false);
 
   useEffect(() => {
     if (!sessionLoading && user) {
-      fetchUserProfileAndOrders(user.id);
+      fetchUserOrders(user.id);
     } else if (!sessionLoading && !user) {
-      setLoading(false);
-      setError("You must be logged in to view your account.");
+      setLoadingOrders(false);
+      setOrdersError("You must be logged in to view your account.");
     }
   }, [user, sessionLoading]);
 
-  const fetchUserProfileAndOrders = async (userId: string) => {
-    setLoading(true);
-    setError(null);
+  const fetchUserOrders = async (userId: string) => {
+    setLoadingOrders(true);
+    setOrdersError(null);
 
-    // Fetch user profile
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('full_name, email')
-      .eq('id', userId)
-      .single();
-
-    if (profileError) {
-      if (profileError.code === 'PGRST116') { // No rows found
-        console.warn(`No profile found for user ${userId} in MyAccount. Displaying default info.`);
-        // Provide a default profile object to prevent null issues in rendering
-        setProfile({ id: userId, full_name: 'Guest User', email: user?.email || 'N/A', is_admin: false, created_at: '', updated_at: '', user_id: userId });
-      } else {
-        console.error('Error fetching user profile:', profileError);
-        toast.error('Failed to load user profile.');
-        setProfile(null);
-      }
-    } else {
-      setProfile(profileData as Profile);
-    }
-
-    // Fetch user orders
     const { data: ordersData, error: ordersError } = await supabase
       .from('orders')
       .select('*, order_items(*, cookies(name, imageUrl))')
@@ -62,18 +42,46 @@ const MyAccount = () => {
       console.error('Error fetching user orders:', ordersError);
       toast.error('Failed to load your orders.');
       setOrders([]);
+      setOrdersError('Failed to load your orders.');
     } else {
       setOrders(ordersData as Order[]);
     }
-    setLoading(false);
+    setLoadingOrders(false);
   };
 
-  if (sessionLoading || loading) {
+  const handleUpdateProfile = async (updatedProfileData: Omit<Profile, 'id' | 'created_at' | 'updated_at'>) => {
+    if (!user) {
+      toast.error("You must be logged in to update your profile.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        full_name: updatedProfileData.full_name,
+        email: updatedProfileData.email,
+        home_address: updatedProfileData.home_address,
+        phone_number: updatedProfileData.phone_number,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id);
+
+    if (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile.');
+    } else {
+      toast.success('Profile updated successfully!');
+      await refreshProfile(); // Refresh the session context profile
+      setIsProfileFormOpen(false);
+    }
+  };
+
+  if (sessionLoading || loadingOrders) {
     return <div className="text-center py-10">Loading your account details...</div>;
   }
 
-  if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (ordersError) {
+    return <div className="text-center py-10 text-red-500">{ordersError}</div>;
   }
 
   return (
@@ -81,8 +89,25 @@ const MyAccount = () => {
       <h1 className="text-4xl font-extrabold text-primary text-center mb-8">My Account</h1>
 
       <Card className="mb-8 shadow-lg">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-2xl font-bold">Profile Information</CardTitle>
+          <Dialog open={isProfileFormOpen} onOpenChange={setIsProfileFormOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Edit className="mr-2 h-4 w-4" /> Edit Profile
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit Profile</DialogTitle>
+              </DialogHeader>
+              <UserProfileForm
+                initialData={profile}
+                onSubmit={handleUpdateProfile}
+                onCancel={() => setIsProfileFormOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="flex items-center text-lg">
@@ -93,7 +118,14 @@ const MyAccount = () => {
             <Mail className="mr-3 h-5 w-5 text-muted-foreground" />
             <span>Email: {profile?.email || user?.email || 'N/A'}</span>
           </div>
-          {/* Add more profile details here if needed */}
+          <div className="flex items-center text-lg">
+            <Home className="mr-3 h-5 w-5 text-muted-foreground" />
+            <span>Address: {profile?.home_address || 'N/A'}</span>
+          </div>
+          <div className="flex items-center text-lg">
+            <Phone className="mr-3 h-5 w-5 text-muted-foreground" />
+            <span>Phone: {profile?.phone_number || 'N/A'}</span>
+          </div>
         </CardContent>
       </Card>
 

@@ -9,6 +9,8 @@ interface SessionContextType {
   user: User | null;
   isAdmin: boolean;
   loading: boolean;
+  profile: Profile | null; // Add profile to context
+  refreshProfile: () => Promise<void>; // Add refresh function
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
@@ -17,7 +19,41 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [profile, setProfile] = useState<Profile | null>(null); // State for profile
   const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchUserProfile = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*, user_id') // Select all profile fields, including new ones
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        console.warn(`No profile found for user ${userId}. Assuming not admin.`);
+        setIsAdmin(false);
+        setProfile(null); // Set profile to null if not found
+      } else {
+        console.error('Error fetching user profile:', error);
+        setIsAdmin(false);
+        setProfile(null);
+        toast.error('Failed to load user profile.');
+      }
+    } else if (data) {
+      setIsAdmin(data.is_admin);
+      setProfile(data as Profile); // Set the fetched profile
+    } else {
+      setIsAdmin(false);
+      setProfile(null);
+    }
+  };
+
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchUserProfile(user.id);
+    }
+  };
 
   useEffect(() => {
     const getSession = async () => {
@@ -44,7 +80,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
           if (currentSession?.user) {
             await fetchUserProfile(currentSession.user.id);
           } else {
-            setIsAdmin(false); // Clear admin status on sign out
+            setIsAdmin(false);
+            setProfile(null); // Clear profile on sign out
           }
         } catch (error) {
           console.error("Error during auth state change:", error);
@@ -62,35 +99,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const fetchUserProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', userId)
-      .single();
-
-    if (error) {
-      // Supabase's .single() method returns an error if no row is found.
-      // The error code for 'no rows found' is typically 'PGRST116'.
-      if (error.code === 'PGRST116') {
-        console.warn(`No profile found for user ${userId}. Assuming not admin.`);
-        setIsAdmin(false);
-      } else {
-        console.error('Error fetching user profile:', error);
-        setIsAdmin(false);
-        toast.error('Failed to load user profile.');
-      }
-    } else if (data) {
-      setIsAdmin(data.is_admin);
-    } else {
-      // This case should ideally not be reached if error.code === 'PGRST116' is handled above,
-      // but as a fallback, assume not admin if data is null.
-      setIsAdmin(false);
-    }
-  };
-
   return (
-    <SessionContext.Provider value={{ session, user, isAdmin, loading }}>
+    <SessionContext.Provider value={{ session, user, isAdmin, loading, profile, refreshProfile }}>
       {children}
     </SessionContext.Provider>
   );
