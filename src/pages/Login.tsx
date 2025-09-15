@@ -33,7 +33,6 @@ const Login = () => {
                 colors: {
                   brand: 'hsl(var(--primary))',
                   brandAccent: 'hsl(var(--primary-foreground))',
-                  // Adjust other colors for dark theme if needed
                   defaultButtonBackground: 'hsl(var(--secondary))',
                   defaultButtonBackgroundHover: 'hsl(var(--secondary-foreground))',
                   inputBackground: 'hsl(var(--input))',

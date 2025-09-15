@@ -72,5 +72,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Explicitly set a dark background for testing if the 'dark' class is applied */
+    @apply dark:bg-zinc-900; 
   }
 }
