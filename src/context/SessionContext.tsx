@@ -20,43 +20,39 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user || null);
-      if (session?.user) {
-        await fetchUserProfile(session.user.id);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user || null);
+        if (session?.user) {
+          await fetchUserProfile(session.user.id);
+        }
+      } catch (error) {
+        console.error("Error getting initial session:", error);
+        toast.error("Failed to load session.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, currentSession) => {
-        setSession(currentSession);
-        setUser(currentSession?.user || null);
-        if (currentSession?.user) {
-          await fetchUserProfile(currentSession.user.id);
-        } else {
-          setIsAdmin(false); // Clear admin status on sign out
+        try {
+          setSession(currentSession);
+          setUser(currentSession?.user || null);
+          if (currentSession?.user) {
+            await fetchUserProfile(currentSession.user.id);
+          } else {
+            setIsAdmin(false); // Clear admin status on sign out
+          }
+        } catch (error) {
+          console.error("Error during auth state change:", error);
+          toast.error("Authentication state update failed.");
+        } finally {
+          setLoading(false);
         }
-        setLoading(false);
       }
     );
-
-    const fetchUserProfile = async (userId: string) => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        setIsAdmin(false);
-        toast.error('Failed to load user profile.');
-      } else if (data) {
-        setIsAdmin(data.is_admin);
-      }
-    };
 
     getSession();
 
@@ -64,6 +60,22 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       subscription.unsubscribe();
     };
   }, []);
+
+  const fetchUserProfile = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user profile:', error);
+      setIsAdmin(false);
+      toast.error('Failed to load user profile.');
+    } else if (data) {
+      setIsAdmin(data.is_admin);
+    }
+  };
 
   return (
     <SessionContext.Provider value={{ session, user, isAdmin, loading }}>
