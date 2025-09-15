@@ -8,7 +8,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import Admin from "./pages/Admin";
-import AdminOrders from "./pages/AdminOrders"; // Import AdminOrders
+import AdminOrders from "./pages/AdminOrders";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -27,8 +27,22 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/cookie/:id" element={<CookieDetail />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/order-confirmation"
+                element={
+                  <ProtectedRoute>
+                    <OrderConfirmation />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/login" element={<Login />} />
               <Route
                 path="/admin"
@@ -39,7 +53,7 @@ function App() {
                 }
               />
               <Route
-                path="/admin/orders" // New route for Admin Orders
+                path="/admin/orders"
                 element={
                   <ProtectedRoute adminOnly>
                     <AdminOrders />
