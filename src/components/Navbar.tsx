@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, LogOut, Package } from "lucide-react"; // Added Package icon
+import { ShoppingCart, User, LogOut, Package } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSession } from "@/context/SessionContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,24 +32,30 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </Button>
           <Button variant="ghost" asChild>
-            <Link to="/products">Shop</Link> {/* Re-added Shop link for easier navigation */}
+            <Link to="/products">Shop</Link>
           </Button>
           <Button variant="ghost" asChild>
             <Link to="/cart">
-              <ShoppingCart className="mr-2 h-4 w-4" /> Cart ({cartItemCount})
+              <span className="flex items-center">
+                <ShoppingCart className="mr-2 h-4 w-4" /> Cart ({cartItemCount})
+              </span>
             </Link>
           </Button>
-          {session && ( // Show My Orders link only if logged in
+          {session && (
             <Button variant="ghost" asChild>
               <Link to="/my-orders">
-                <Package className="mr-2 h-4 w-4" /> My Orders
+                <span className="flex items-center">
+                  <Package className="mr-2 h-4 w-4" /> My Orders
+                </span>
               </Link>
             </Button>
           )}
-          {isAdmin && ( // Only show Admin link if user is an admin
+          {isAdmin && (
             <Button variant="ghost" asChild>
               <Link to="/admin">
-                <User className="mr-2 h-4 w-4" /> Admin
+                <span className="flex items-center">
+                  <User className="mr-2 h-4 w-4" /> Admin
+                </span>
               </Link>
             </Button>
           )}
@@ -60,7 +66,9 @@ const Navbar = () => {
           ) : (
             <Button variant="ghost" asChild>
               <Link to="/login">
-                <User className="mr-2 h-4 w-4" /> Login
+                <span className="flex items-center">
+                  <User className="mr-2 h-4 w-4" /> Login
+                </span>
               </Link>
             </Button>
           )}

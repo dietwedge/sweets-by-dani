@@ -27,7 +27,9 @@ const Checkout = () => {
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <Button asChild variant="outline">
           <Link to="/cart">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Cart
+            <span className="flex items-center">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Cart
+            </span>
           </Link>
         </Button>
         <Button onClick={handleCompleteOrder} disabled={cartTotal === 0}>

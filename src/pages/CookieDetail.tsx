@@ -4,13 +4,13 @@ import { mockCookies } from "@/data/mock-cookies";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Minus, Plus } from "lucide-react";
-import { useCart } from "@/context/CartContext"; // Import useCart
+import { useCart } from "@/context/CartContext";
 
 const CookieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const cookie = mockCookies.find(c => c.id === id);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart(); // Use addToCart from context
+  const { addToCart } = useCart();
 
   if (!cookie) {
     return (
@@ -19,7 +19,9 @@ const CookieDetail = () => {
         <p className="text-lg text-gray-600">The cookie you are looking for does not exist.</p>
         <Button asChild className="mt-4">
           <Link to="/products">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Products
+            <span className="flex items-center">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Products
+            </span>
           </Link>
         </Button>
       </div>
@@ -34,7 +36,9 @@ const CookieDetail = () => {
     <div className="py-8 max-w-4xl mx-auto">
       <Button variant="outline" asChild className="mb-6">
         <Link to="/products">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Products
+          <span className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Products
+          </span>
         </Link>
       </Button>
 
