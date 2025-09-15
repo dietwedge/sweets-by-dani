@@ -1,28 +1,43 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
-import Cart from "./pages/Cart";
-import Admin from "./pages/Admin";
+import Index from "./pages/Index";
 import Products from "./pages/Products";
 import CookieDetail from "./pages/CookieDetail";
-import { CartProvider } from "./context/CartContext";
+import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import OrderConfirmation from "./pages/OrderConfirmation"; // Import the new OrderConfirmation page
+import OrderConfirmation from "./pages/OrderConfirmation";
+import Admin from "./pages/Admin";
+import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import { CartProvider } from "./context/CartContext";
+import { SessionProvider, useSession } from "./context/SessionContext";
+import { Toaster } from "@/components/ui/sonner"; // Assuming sonner is installed for toasts
 
-const queryClient = new QueryClient();
+// A simple wrapper to protect routes
+const ProtectedRoute = ({ children, adminOnly = false }) => {
+  const { session, loading, isAdmin } = useSession();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <CartProvider>
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading authentication...</div>;
+  }
+
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/" replace />; // Redirect non-admins from admin routes
+  }
+
+  return children;
+};
+
+function App() {
+  return (
+    <Router>
+      <CartProvider>
+        <SessionProvider>
+          <Toaster /> {/* Toaster for displaying notifications */}
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -30,16 +45,23 @@ const App = () => (
               <Route path="/cookie/:id" element={<CookieDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} /> {/* New Order Confirmation route */}
-              <Route path="/admin" element={<Admin />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
-        </CartProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+        </SessionProvider>
+      </CartProvider>
+    </Router>
+  );
+}
 
 export default App;
