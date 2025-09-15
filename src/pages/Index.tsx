@@ -2,15 +2,16 @@ import { mockCookies } from "@/data/mock-cookies";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import HeroSection from "@/components/HeroSection"; // Import the new HeroSection
+import HeroSection from "@/components/HeroSection";
+import ContactForm from "@/components/ContactForm"; // Import the new ContactForm
 
 const Index = () => {
   const featuredCookies = mockCookies.filter(cookie => cookie.isFeatured);
 
   return (
     <>
-      <HeroSection /> {/* Add the HeroSection here */}
-      <div className="py-8"> {/* Adjusted main div for content flow */}
+      <HeroSection />
+      <div className="py-8">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-extrabold text-primary mb-4">Welcome to Sweets by Dani!</h1>
           <p className="text-xl text-muted-foreground">
@@ -18,7 +19,7 @@ const Index = () => {
           </p>
         </div>
 
-        <section className="w-full max-w-6xl mx-auto">
+        <section className="w-full max-w-6xl mx-auto mb-12"> {/* Added margin-bottom */}
           <h2 className="text-3xl font-bold text-center mb-6 text-foreground">Our Featured Delights</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredCookies.map(cookie => (
@@ -40,6 +41,8 @@ const Index = () => {
             ))}
           </div>
         </section>
+
+        <ContactForm /> {/* Add the ContactForm here */}
       </div>
     </>
   );

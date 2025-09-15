@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { MadeWithDyad } from "./made-with-dyad";
+import Footer from "./Footer"; // Import the new Footer component
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="flex-grow container mx-auto p-4">
         {children}
       </main>
-      <MadeWithDyad />
+      <Footer /> {/* Use the new Footer component */}
     </div>
   );
 };
