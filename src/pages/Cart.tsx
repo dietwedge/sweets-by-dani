@@ -16,7 +16,7 @@ const Cart = () => {
         <div className="text-center py-10">
           <p className="text-lg text-muted-foreground mb-4">Your cart is currently empty.</p>
           <Button asChild>
-            <Link to="/products">Start Shopping</Link>
+            <Link to="/">Start Shopping</Link> {/* Changed to home page */}
           </Button>
         </div>
       ) : (

@@ -1,49 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from '@/context/SessionContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Order } from '@/types/db';
+import { Order, Profile } from '@/types/db'; // Assuming Profile type exists or will be created
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Package, DollarSign, Calendar, ShoppingBag } from 'lucide-react';
+import { Package, DollarSign, Calendar, UserCircle2, Mail } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 
-const MyOrders = () => {
+const MyAccount = () => {
   const { user, loading: sessionLoading } = useSession();
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!sessionLoading && user) {
-      fetchMyOrders(user.id);
+      fetchUserProfileAndOrders(user.id);
     } else if (!sessionLoading && !user) {
       setLoading(false);
-      setError("You must be logged in to view your orders.");
+      setError("You must be logged in to view your account.");
     }
   }, [user, sessionLoading]);
 
-  const fetchMyOrders = async (userId: string) => {
+  const fetchUserProfileAndOrders = async (userId: string) => {
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase
+
+    // Fetch user profile
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', userId)
+      .single();
+
+    if (profileError) {
+      console.error('Error fetching user profile:', profileError);
+      toast.error('Failed to load user profile.');
+      setProfile(null);
+    } else {
+      setProfile(profileData as Profile);
+    }
+
+    // Fetch user orders
+    const { data: ordersData, error: ordersError } = await supabase
       .from('orders')
       .select('*, order_items(*, cookies(name, imageUrl))')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching user orders:', error);
-      setError('Failed to load your orders.');
+    if (ordersError) {
+      console.error('Error fetching user orders:', ordersError);
+      toast.error('Failed to load your orders.');
+      setOrders([]);
     } else {
-      setOrders(data as Order[]);
+      setOrders(ordersData as Order[]);
     }
     setLoading(false);
   };
 
   if (sessionLoading || loading) {
-    return <div className="text-center py-10">Loading your orders...</div>;
+    return <div className="text-center py-10">Loading your account details...</div>;
   }
 
   if (error) {
@@ -52,13 +72,32 @@ const MyOrders = () => {
 
   return (
     <div className="py-8 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-extrabold text-primary text-center mb-8">My Orders</h1>
+      <h1 className="text-4xl font-extrabold text-primary text-center mb-8">My Account</h1>
+
+      <Card className="mb-8 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Profile Information</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="flex items-center text-lg">
+            <UserCircle2 className="mr-3 h-5 w-5 text-muted-foreground" />
+            <span>Name: {profile?.full_name || 'N/A'}</span>
+          </div>
+          <div className="flex items-center text-lg">
+            <Mail className="mr-3 h-5 w-5 text-muted-foreground" />
+            <span>Email: {profile?.email || user?.email || 'N/A'}</span>
+          </div>
+          {/* Add more profile details here if needed */}
+        </CardContent>
+      </Card>
+
+      <h2 className="text-3xl font-extrabold text-primary text-center mb-6">My Orders</h2>
 
       {orders.length === 0 ? (
         <div className="text-center py-10">
           <p className="text-lg text-muted-foreground mb-4">You haven't placed any orders yet.</p>
           <Button asChild>
-            <Link to="/products">Start Shopping</Link>
+            <Link to="/">Start Shopping</Link>
           </Button>
         </div>
       ) : (
@@ -116,4 +155,4 @@ const MyOrders = () => {
   );
 };
 
-export default MyOrders;
+export default MyAccount;

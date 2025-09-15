@@ -22,7 +22,7 @@ const OrderConfirmation = () => {
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <Button asChild>
-          <Link to="/products">Continue Shopping</Link>
+          <Link to="/">Continue Shopping</Link> {/* Changed to home page */}
         </Button>
         <Button variant="outline" asChild>
           <Link to="/">Return to Home</Link>

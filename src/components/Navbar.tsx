@@ -31,7 +31,6 @@ const Navbar = () => {
           <Button variant="ghost" asChild>
             <Link to="/">Home</Link>
           </Button>
-          {/* Removed "Shop" link */}
           <Button variant="ghost" asChild>
             <Link to="/cart">
               <span className="flex items-center">
@@ -41,9 +40,9 @@ const Navbar = () => {
           </Button>
           {session && (
             <Button variant="ghost" asChild>
-              <Link to="/my-orders">
+              <Link to="/my-account"> {/* Changed to My Account */}
                 <span className="flex items-center">
-                  <Package className="mr-2 h-4 w-4" /> My Orders
+                  <User className="mr-2 h-4 w-4" /> My Account
                 </span>
               </Link>
             </Button>
@@ -52,7 +51,7 @@ const Navbar = () => {
             <Button variant="ghost" asChild>
               <Link to="/admin">
                 <span className="flex items-center">
-                  <User className="mr-2 h-4 w-4" /> Admin
+                  <Package className="mr-2 h-4 w-4" /> Admin
                 </span>
               </Link>
             </Button>
