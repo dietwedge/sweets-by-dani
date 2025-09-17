@@ -20,9 +20,9 @@ const Login = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center text-primary mb-6">Sign In / Sign Up</h1>
+    <div className="min-h-screen flex items-center justify-center bg-background p-4"> {/* Use bg-background for consistency */}
+      <div className="w-full max-w-md bg-card p-8 rounded-lg shadow-md"> {/* Use bg-card for consistency */}
+        <h1 className="text-3xl font-bold text-primary mb-6 text-center">Sign In / Sign Up</h1>
         <Auth
           supabaseClient={supabase}
           providers={['google', 'facebook']}
@@ -44,7 +44,7 @@ const Login = () => {
               },
             },
           }}
-          theme="dark" // Set the theme to dark
+          theme="dark" // Keep theme="dark" for Supabase Auth UI
           redirectTo={window.location.origin}
         />
       </div>

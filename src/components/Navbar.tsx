@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, User, LogOut, Package } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useSession } from "@/context/SessionContext";
+import { useSession } => "@/context/SessionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ThemeToggle } from "./ThemeToggle"; // Import ThemeToggle
+// ThemeToggle is removed
 
 const Navbar = () => {
   const { cartItemCount } = useCart();
@@ -70,7 +70,7 @@ const Navbar = () => {
               </Link>
             </Button>
           )}
-          <ThemeToggle /> {/* Add ThemeToggle here */}
+          {/* ThemeToggle is removed from here */}
         </div>
       </div>
     </nav>
