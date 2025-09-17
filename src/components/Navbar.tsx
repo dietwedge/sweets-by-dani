@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, User, LogOut, Package } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useSession } => "@/context/SessionContext";
+import { useSession } from "@/context/SessionContext"; // Corrected '=>' to 'from'
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 // ThemeToggle is removed
