@@ -13,7 +13,7 @@ const Checkout = () => {
   const { cart, cartTotal, clearCart } = useCart();
   const { user } = useSession();
   const navigate = useNavigate();
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('stripe'); // Default to Stripe
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('venmo'); // Default to Venmo
 
   const handleCompleteOrder = async () => {
     console.log("handleCompleteOrder called.");
@@ -113,12 +113,8 @@ const Checkout = () => {
         <RadioGroup
           defaultValue={selectedPaymentMethod}
           onValueChange={setSelectedPaymentMethod}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
-          <div className="flex items-center space-x-2 border p-4 rounded-md">
-            <RadioGroupItem value="stripe" id="stripe" />
-            <Label htmlFor="stripe" className="text-lg font-medium">Credit Card (Stripe)</Label>
-          </div>
           <div className="flex items-center space-x-2 border p-4 rounded-md">
             <RadioGroupItem value="venmo" id="venmo" />
             <Label htmlFor="venmo" className="text-lg font-medium">Venmo</Label>

@@ -95,19 +95,8 @@ const OrderConfirmation = () => {
             </p>
           </div>
         );
-      case 'stripe':
       default:
-        return (
-          <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-md">
-            <h3 className="text-xl font-semibold text-purple-800 mb-2">Credit Card Payment</h3>
-            <p className="text-purple-700">
-              Your order has been placed. A secure payment link will be sent to your email shortly to complete the payment via Stripe.
-            </p>
-            <p className="text-purple-700 mt-2">
-              Your order will be processed once payment is confirmed.
-            </p>
-          </div>
-        );
+        return null;
     }
   };
 
