@@ -17,14 +17,14 @@ const Checkout = () => {
 
   const handleCompleteOrder = async () => {
     console.log("handleCompleteOrder called.");
-    console.log("User:", user);
-    console.log("Cart length:", cart.length);
+    console.log("Current user:", user);
+    console.log("Cart items:", cart);
     console.log("Cart total:", cartTotal);
 
     if (!user) {
       toast.error("You must be logged in to place an order.");
       navigate('/login');
-      console.log("Redirecting to login.");
+      console.log("Redirecting to login because user is not logged in.");
       return;
     }
 
@@ -36,6 +36,7 @@ const Checkout = () => {
     }
 
     try {
+      console.log("Attempting to create order in Supabase...");
       // 1. Create the order in the 'orders' table
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
@@ -50,34 +51,39 @@ const Checkout = () => {
         .single();
 
       if (orderError || !orderData) {
+        console.error("Supabase order creation error:", orderError);
         throw new Error(orderError?.message || "Failed to create order.");
       }
 
       const orderId = orderData.id;
-      console.log("Order created with ID:", orderId);
+      console.log("Order created successfully with ID:", orderId);
+      console.log("Order data:", orderData);
 
       // 2. Create order items in the 'order_items' table
+      console.log("Attempting to create order items in Supabase...");
       const orderItems = cart.map(item => ({
         order_id: orderId,
         cookie_id: item.id,
         quantity: item.quantity,
         price: item.price,
       }));
+      console.log("Order items to insert:", orderItems);
 
       const { error: orderItemsError } = await supabase
         .from('order_items')
         .insert(orderItems);
 
       if (orderItemsError) {
+        console.error("Supabase order items creation error:", orderItemsError);
         throw new Error(orderItemsError?.message || "Failed to create order items.");
       }
-      console.log("Order items created.");
+      console.log("Order items created successfully.");
 
       // 3. Clear the cart and navigate to confirmation
       clearCart();
       toast.success("Order placed successfully!");
+      console.log("Cart cleared. Navigating to order confirmation.");
       navigate("/order-confirmation", { state: { orderId, paymentMethod: selectedPaymentMethod } });
-      console.log("Navigating to order confirmation.");
 
     } catch (error: any) {
       console.error("Error completing order:", error.message);
