@@ -20,7 +20,7 @@ function App() {
     <SessionProvider>
       <CartProvider>
         <Router>
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="bottom-right" /> {/* Changed position to bottom-right */}
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
