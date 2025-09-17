@@ -140,7 +140,7 @@ const Checkout = () => {
             </span>
           </Link>
         </Button>
-        <Button onClick={handleCompleteOrder} disabled={cartTotal === 0 || !user}>
+        <Button onClick={handleCompleteOrder}> {/* Temporarily removed disabled prop */}
           Place Order
         </Button>
       </div>
